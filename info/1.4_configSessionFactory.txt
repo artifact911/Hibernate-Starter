@@ -1,0 +1,33 @@
+Для конфигурации Hibernate нам нужен hibernate-config.xml.
+Можно сгенерить идеей:
+    ProjectStructure ->
+    Modules ->
+    кликаем по проекту rmb ->
+    + ->
+    добавляем хиберМодуль ->
+    справа кликаем + ->
+    выбираем xml и куда ложить ->
+    apply -> ok
+
+Открываем xml и заполняем:
+     <property name="connection.url">jdbc:postgresql://localhost:5433/postgres</property>
+     <property name="connection.username">postgres</property>
+     <property name="connection.password">pass</property>
+     <property name="connection.driver_class">org.postgresql.Driver</property>
+     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property> - позволяет сконфигурировать
+        какие-то дополнительные SQL типы, функции и т.д. которые специфичны для конкретной БД
+
+
+
+    // Этот класс служит для создания SessionFactory
+    Configuration configuration = new Configuration();
+
+    // configure() принимает путь к xml. Если не указывать - ищет в рутовых ресурсах проекта
+    configuration.configure();
+
+    // создаем SF на основании всех полей класса SF + что конфиг.xml
+    SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Как и ConnectionPool - должен существовать всего лишь один объект типа SessionFactory. Поэтому мы его закрываем
+        в try-with-resources.
+    // теперь у SF мы можем получить сессию - что-то вроде обертки вокруг нашего Connection
+
