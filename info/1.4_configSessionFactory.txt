@@ -17,7 +17,12 @@
      <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property> - позволяет сконфигурировать
         какие-то дополнительные SQL типы, функции и т.д. которые специфичны для конкретной БД
 
+     <property name="show_sql">true</property> - чтобы удобно смотреть, какую sql формирует хибер
+     <property name="format_sql">true</property> - красиво форматировал показ sql
 
+     <mapping class="org.art.entity.User"/> - рассказали SF что это теперь надо маппить на БД
+
+***********************************************************************************
 
     // Этот класс служит для создания SessionFactory
     Configuration configuration = new Configuration();

@@ -1,0 +1,19 @@
+Все Entity в Hibernate должны быть POJO (Plain Old Java Object), а значит есть правила:
+    - все поля private
+    - getter
+    - setter
+    - сущность должна быть не immutable а значит не даем final полям
+    - не делаем final класс, т.к. хибер под капотом наследуется от класса
+    - @NoArgsConstructor
+    - toString()
+    - equalsAndHashcode
+
+Затем, мы должны объяснить Хиберу, что за нашей сущностью надо следить - Это делает sessionFactory (SF). Два способа:
+    1. В configuration
+            // указали, что это сущность и за ней надо теперь следить
+                    configuration.addAnnotatedClass(User.class);
+
+    2. В хиберКонфиге добавить маппинг:
+            <mapping class="org.art.entity.User"/>
+
+    3. Древний xml-способ.

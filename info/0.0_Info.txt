@@ -1,0 +1,9 @@
+1. Транзакциями мы управляем вречную. Не autoCommitMod.
+         session.beginTransaction(); - открыли
+         session.getTransaction().commit(); - закоммитили, если успех
+         session.getTransaction().rollback(); - откатили
+
+2. По умолчанию Hibernate берет название класса/полей в качестве названия таблицы/колонок в БД (SQL не чувствителен
+        к регистру). Если у нас есть разница, то юзаем аннотации:
+            @Table(name = "users", schema = "public") - если название таблицы отличное от названия класса-entity;
+            @Column(name = "birth_date") - если название колонки отличное от названия поля;
