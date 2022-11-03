@@ -1,0 +1,8 @@
+1. Ставим докер;
+2. Гуглим postgresql docker image и переходим на https://hub.docker.com тут написано как стартануть;
+3. docker run --name some-postgres -e POSTGRES_PASSWORD=pass -p 5433:5432  -d postgres
+        - задаем удобный пароль - pass
+        - -p указываем порт. Слева мы поменяли, т.к. он юзается сейчас в системе десктопный postgresql; справа - это
+            порт внутри контейнера;
+
+4. docker ps - мы увидим созданный image "postgres"
