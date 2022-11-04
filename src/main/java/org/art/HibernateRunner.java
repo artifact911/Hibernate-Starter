@@ -1,6 +1,8 @@
 package org.art;
 
 import lombok.SneakyThrows;
+import org.art.converter.BirthdayConverter;
+import org.art.entity.Birthday;
 import org.art.entity.Role;
 import org.art.entity.User;
 import org.hibernate.Session;
@@ -25,6 +27,11 @@ public class HibernateRunner {
         // не стали юзать так, т.к. указали маппинг в xml
 //        configuration.addAnnotatedClass(User.class);
 
+        // указали Хиберу, автоматом юзать этот конвертер. Вторым параметров нужно указать true, чтоб работало автоматом
+        // и не нужно было ставить над полями, а можно тут не писать, а поставить анноташку над конвертером
+        // @Converter(autoApply = true)
+        configuration.addAttributeConverter(new BirthdayConverter());
+
         // configure() принимает путь к xml. Если не указывать - ищет в рутовых ресурсах проекта
         configuration.configure();
 
@@ -33,11 +40,10 @@ public class HibernateRunner {
 
             session.beginTransaction();
             User user = User.builder()
-                    .username("ivan@gmail.com")
+                    .username("ivan1@gmail.com")
                     .firstname("Ivan")
                     .lastname("Ivanov")
-                    .birthDate(LocalDate.of(2000, 1, 19))
-                    .age(20)
+                    .birthDate(new Birthday(LocalDate.of(2000, 1, 19)))
                     .role(Role.ADMIN)
                     .build();
             session.save(user);

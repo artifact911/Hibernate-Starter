@@ -3,3 +3,6 @@
 @Table(name = "users", schema = "public") - если название таблицы отличное от названия класса-entity;
 @Column(name = "birth_date") - если название колонки отличное от названия поля;
 @Enumerated(EnumType.STRING) - для того, что бы пушить значения енамов в БД как стринг (по умолчанию цифрами);
+@Convert(converter = BirthdayConverter.class) - над полем, если нужно объяснить Хиберу, как преобразовать тип этого поля;
+@Converter(autoApply = true) - ставим над конвертером, указав хиберу, что юзай его автоматически (предварительно
+    настроив configuration.addAttributeConverter(new BirthdayConverter());)

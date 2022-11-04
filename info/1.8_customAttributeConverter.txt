@@ -1,0 +1,34 @@
+Для маппинга наших кастомных классов в sql мы можем написать свой конвертер реализуя интерфейс AttributeConverter
+
+    public class BirthdayConverter implements AttributeConverter<Birthday, Date> {
+
+        @Override
+        public Date convertToDatabaseColumn(Birthday attribute) {
+            return Optional.ofNullable(attribute)
+                    .map(Birthday::birthDate)
+                    .map(Date::valueOf)
+                    .orElse(null);
+        }
+
+        @Override
+        public Birthday convertToEntityAttribute(Date dbData) {
+            return Optional.ofNullable(dbData)
+                    .map(Date::toLocalDate)
+                    .map(Birthday::new)
+                    .orElse(null);
+        }
+    }
+
+Теперь идем в нашу сущность и мы должны рассказать Хиберу, что нужно использовать наш конвернтер для преобразования
+    этого поля.
+     @Convert(converter = BirthdayConverter.class)
+     @Column(name = "birth_date")
+     private Birthday birthDate;
+
+Но можно сказать Хиберу, что в любом месте, где мы юзаем такое поле, какой конвертер использовать, чтобы нам не писать
+    это над каждым полем.
+
+      // указали Хиберу, автоматом юзать этот конвертер. Вторым параметром нужно указать true, чтоб работало автоматом
+            // и не нужно было ставить над полями, а можно тут не писать, а поставить анноташку над конвертером
+            // @Converter(autoApply = true)
+            configuration.addAttributeConverter(new BirthdayConverter());
