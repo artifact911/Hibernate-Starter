@@ -7,15 +7,36 @@ import org.art.entity.Birthday;
 import org.art.entity.User;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 class HibernateRunnerTest {
+
+    // Как Хибер под капотом парсит ответ из БД в JavaPojo
+    @SneakyThrows
+    @Test
+    void checkGetReflectionApi() {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.getString("username");
+        resultSet.getString("lastname");
+        resultSet.getString("firstname");
+
+        Class<User> clazz = User.class;
+
+        Constructor<User> constructor = clazz.getConstructor();
+        User user = constructor.newInstance();
+        Field usernameField = clazz.getDeclaredField("username");
+        usernameField.setAccessible(true);
+        usernameField.set(user, resultSet.getString("username"));
+    }
 
     @SneakyThrows
     @Test

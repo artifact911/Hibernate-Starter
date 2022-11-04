@@ -32,9 +32,6 @@ public class HibernateRunner {
         // @Converter(autoApply = true)
         configuration.addAttributeConverter(new BirthdayConverter());
 
-//        // регаем новый тип для распознавания
-//        configuration.registerTypeOverride(new JsonBinaryType());
-
         // configure() принимает путь к xml. Если не указывать - ищет в рутовых ресурсах проекта
         configuration.configure();
 
@@ -42,20 +39,30 @@ public class HibernateRunner {
              Session session = sessionFactory.openSession()) {   // теперь у SF мы можем получить сессию - что-то вроде обертки вокруг нашего Connection
 
             session.beginTransaction();
-            User user = User.builder()
-                    .username("ivan1@gmail.com")
-                    .firstname("Ivan")
-                    .lastname("Ivanov")
-                    .info("""
-                            {
-                            "name": "Ivan",
-                            "id": 25
-                            }
-                            """)
-                    .birthDate(new Birthday(LocalDate.of(2000, 1, 19)))
-                    .role(Role.ADMIN)
-                    .build();
-            session.save(user);
+
+//            User user = User.builder()
+//                    .username("ivan112@gmail.com")
+//                    .firstname("Ivan")
+//                    .lastname("Ivanov")
+//                    .info("""
+//                            {
+//                            "name": "Ivan",
+//                            "id": 25
+//                            }
+//                            """)
+//                    .birthDate(new Birthday(LocalDate.of(2000, 1, 19)))
+//                    .role(Role.ADMIN)
+//                    .build();
+
+            /**
+             * Операции persist, merge, remove осуществляются по id юзера
+             */
+//             session.persist(user);  // Добавляет пользователя в базу данных
+//             session.merge(user);  // Делает update юзера в БД. Если в БД такого юзера нет, то метод его туда запишет (saveOrUpdate)
+//             session.remove(user); // Удаляет юзера из БД
+
+            User user = session.get(User.class, "ivan112@gmail.com");
+
             session.getTransaction().commit();
         }
     }
