@@ -1,10 +1,10 @@
 package org.art;
 
 import lombok.SneakyThrows;
+import org.art.entity.Role;
 import org.art.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.cfg.Configuration;
 
 import java.time.LocalDate;
@@ -38,6 +38,7 @@ public class HibernateRunner {
                     .lastname("Ivanov")
                     .birthDate(LocalDate.of(2000, 1, 19))
                     .age(20)
+                    .role(Role.ADMIN)
                     .build();
             session.save(user);
             session.getTransaction().commit();
