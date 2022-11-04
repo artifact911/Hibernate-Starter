@@ -32,6 +32,9 @@ public class HibernateRunner {
         // @Converter(autoApply = true)
         configuration.addAttributeConverter(new BirthdayConverter());
 
+//        // регаем новый тип для распознавания
+//        configuration.registerTypeOverride(new JsonBinaryType());
+
         // configure() принимает путь к xml. Если не указывать - ищет в рутовых ресурсах проекта
         configuration.configure();
 
@@ -43,6 +46,12 @@ public class HibernateRunner {
                     .username("ivan1@gmail.com")
                     .firstname("Ivan")
                     .lastname("Ivanov")
+                    .info("""
+                            {
+                            "name": "Ivan",
+                            "id": 25
+                            }
+                            """)
                     .birthDate(new Birthday(LocalDate.of(2000, 1, 19)))
                     .role(Role.ADMIN)
                     .build();
