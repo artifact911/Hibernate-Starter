@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration>
+
+    <!-- Этот appender позволяет выводить наши логи напрямую в терминал (консоль) IntelliJJ Idea -->
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="target" value="System.out"/>
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="conversionPattern" value="[%d{HH:mm:ss, SSS}] %p [%c: %L] %m%n"/>
+        </layout>
+    </appender>
+
+    <!-- Этот appender позволяет выводить наши логи в файл -->
+    <appender name="file" class="org.apache.log4j.RollingFileAppender">
+        <!-- Этот параметр задает место куда будет записан файл с логами и название этого файла -->
+        <param name="file" value="src/main/resources/log/log-file.log"/>
+
+        <!-- Этот параметр означает, будет ли перетираться файл с логом после рестарта приложения или нет -->
+        <!-- true - будет добавляться, а не перетираться-->
+        <param name="append" value="true"/>
+        <!-- Этот параметр задает максимальный размер нашего файла с логом. Как только файл его превышает у нас создается новый лог -->
+        <param name="maxFileSize" value="1MB"/>
+        <!-- Этот параметр означает максимальное количество файлов с логами. По достижению 10 логов, ранние файлы будут заменяться  -->
+        <param name="maxBackupIndex" value="10"/>
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="conversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss, SSS}] %p [%c: %L] %m%n"/>
+        </layout>
+
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ALL"/>
+        </filter>
+    </appender>
+
+    <!--    свой логер для другого пакета-->
+    <!--    additivity="false" чтоб не дублировались сообщения-->
+    <logger name="org.art" additivity="false">
+        <level value="info"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+
+    <root>
+        <!-- Этот параметр устанавливает что именно мы выводим в лог (trace, debug, info, warn, error или ALL) -->
+        <level value="info"/>
+        <!-- Этот параметр означает, что мы выводим логи в терминал (консоль)-->
+        <appender-ref ref="console"/>
+        <!-- Этот параметр означает, что мы выводим логи в файл-->
+        <appender-ref ref="file"/>
+    </root>
+</log4j:configuration>

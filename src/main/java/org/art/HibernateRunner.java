@@ -1,11 +1,13 @@
 package org.art;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.art.entity.User;
 import org.art.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+@Slf4j
 public class HibernateRunner {
 
     @SneakyThrows
@@ -17,6 +19,7 @@ public class HibernateRunner {
                 .lastname("Ivanov")
                 .firstname("Ivan")
                 .build();
+        log.info("User entity is in transient state, object: {}", user);
 
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();

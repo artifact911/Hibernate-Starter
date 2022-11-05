@@ -1,0 +1,19 @@
+Для настройки log4j создаем файл в resources log4j.xml
+
+    <layout class="org.apache.log4j.PatternLayout">
+        <param name="conversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss, SSS}] %p [%c: %L] %m%n"/>
+    </layout>
+
+    - %d{yyyy-MM-dd HH:mm:ss, SSS} - дата
+    - %p - приоритет (info, warn ...)
+    - создав private static final Logger log = LoggerFactory.getLogger(HibernateRunner.class) (@Slf4j) - на месте
+        %c будет указан класс, где логируем.
+    - %L - строка кода
+    - %m%n - само сообщение
+
+    <!--    свой логер для другого пакета-->
+    <!--    additivity="false" чтоб не дублировались сообщения-->
+        <logger name="org.art" additivity="false">
+            <level value="info"/>
+            <appender-ref ref="console"/>
+        </logger>
