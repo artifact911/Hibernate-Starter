@@ -1,5 +1,10 @@
 @Entity - ставим над классом. Значит это сущность hibernate. Заставляет указать на поле, которое является primaryKey(id);
 @Id - ставим над полем, которое является primaryKey. Требование к полю - тип должен быть serializable;
+@GeneratedValue(strategy = GenerationType.IDENTITY) - над полем, для автогенерации первичных ключей с указанием
+    стратегии генерации;
+
+@SequenceGenerator - над полем id, если бзаем seq для генерации id;
+@TableGenerator - ад полем id, если используем table-стратегию;
 @Table(name = "users", schema = "public") - если название таблицы отличное от названия класса-entity;
 @Column(name = "birth_date") - если название колонки отличное от названия поля;
 @Enumerated(EnumType.STRING) - для того, что бы пушить значения енамов в БД как стринг (по умолчанию цифрами);

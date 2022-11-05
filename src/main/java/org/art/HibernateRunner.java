@@ -16,7 +16,7 @@ public class HibernateRunner {
 
         // тут этот user находится в transient для двух сессий.
         User user = User.builder()
-                .username("ivan123@gmail.com")
+                .username("ivan1@gmail.com")
                 .personalInfo(PersonalInfo.builder()
                         .lastname("Ivanov")
                         .firstname("Ivan")

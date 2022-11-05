@@ -1,0 +1,52 @@
+Лучше работать с синтетическими первичными ключами, т.к. они автогенерируемые.
+    - Для этого создадим таблицу и вставим туда поле
+         id BIGSERIAL PRIMARY KEY
+
+    - Теперь наш username обычная колонка
+         @Column(unique = true)
+         private String username;
+     @Column поставили просто для метаинфо, мол уникальное
+
+    - Создадим поле Long id, но теперь нам недостаточно одной аннотации @Id
+         @Id
+         @GeneratedValue(strategy = GenerationType.IDENTITY)
+         private Long id;
+
+    Стратегии бывают (strategy = GenerationType.):
+        - AUTO - она использует IDENTITY, SEQUENCE или TABLE в зависимости от выбранной СУБД и выбранного диалекта. И в
+            случае postgres это будет SEQUENCE;
+
+        - IDENTITY - БД сама отвечает за id и сама его автоинкрементит;
+
+        - SEQUENCE - Это когда используется последовательность. Аналог обычного счетчика, который содержит какое-то
+            значение, например 1 и оно автоматически инкрементируется от каждого вызова. Но они есть не во всех БД.
+            В postgres есть. Если мы откроем БД, под таблицей будет лежать sequences. Он автоматически создался, когда
+            мы пушили в базу BIGSERIAL и он вызывает автоматически функцию nextval(имя сиквенса). Сиквенс мы можем
+            создать и сами. Гуглим postgres sequence  итам написано, как его сделать. Это обычный запрос в БД
+                create sequence users_id_seq
+                owned by users.id;
+                Теперь BIGSERIAL можно выпилить и поставить BIGINT
+            Теперь в сущности нужно указать эту seq в id
+
+                 @Id
+                 @GeneratedValue(generator = "user_gen", strategy = GenerationType.IDENTITY)
+                 @SequenceGenerator(name = "user_gen", sequenceName = "users_id_seq", allocationSize = 1)
+                 private Long id;
+
+                 - allocationSize - на сколько инкрементировать
+
+            Есть и другие функции для работы sequence (например, для обнуления или получения текущего значения без
+            инкремента);
+
+        - TABLE - используется реже всего, когда БД не поддерживает автогенерацию id (древняя, до изобретения
+            IDENTITY, SEQUENCE);
+
+            create table all_sequence
+            (
+                table_name VARCHAR(32) PRIMARY KEY ,
+                pk_value BIGINT NOT NULL
+            )
+
+             @TableGenerator(name = "user_gen", table = "all_sequence",
+                        pkColumnName = "table_name", valueColumnName = "pk_value",
+                        allocationSize = 1)
