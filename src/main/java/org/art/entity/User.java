@@ -19,13 +19,11 @@ public class User {
 
     @Id
     private String username;
-    private String firstname;
-    private String lastname;
 
-    // перепишем в  configuration.addAttributeConverter(new BirthdayConverter());
-//    @Convert(converter = BirthdayConverter.class)
-    @Column(name = "birth_date")
-    private Birthday birthDate;
+    // название этого поля не имеет никакого значения
+    @Embedded
+    @AttributeOverride(name = "birthDate", column = @Column(name = "birth_date"))
+    private PersonalInfo personalInfo;
 
     /**
      * Аннотация ниже позволяет создать свой собственный кастомный тип. В данном случае String будет приводиться к формату JSON, однако
