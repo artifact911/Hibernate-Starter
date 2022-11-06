@@ -39,7 +39,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     // в данном случае не обязательно, т.к. по умолчанию возьмется название класса и его id. получится company_id
     @JoinColumn(name = "company_id")
     private Company company;
