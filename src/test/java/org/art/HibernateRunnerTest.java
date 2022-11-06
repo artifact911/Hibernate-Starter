@@ -41,12 +41,13 @@ class HibernateRunnerTest {
     @SneakyThrows
     @Test
     void checkReflectionApi() {
-        User user = User.builder()
-                .username("ivan@gmail.com")
-                .firstname("Ivan")
-                .lastname("Ivanov")
-                .birthDate(new Birthday(LocalDate.of(2000, 1, 19)))
-                .build();
+        User user = new User();
+//        User user = User.builder()
+//                .username("ivan@gmail.com")
+//                .firstname("Ivan")
+//                .lastname("Ivanov")
+//                .birthDate(new Birthday(LocalDate.of(2000, 1, 19)))
+//                .build();
 
         // как хибер составляет sql-запрос при помощи reflection-api:
         // нужно сформировать
