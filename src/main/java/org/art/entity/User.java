@@ -19,11 +19,6 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @GeneratedValue(generator = "user_gen", strategy = GenerationType.IDENTITY)
-//    @SequenceGenerator(name = "user_gen", sequenceName = "users_id_seq", allocationSize = 1)
-//    @TableGenerator(name = "user_gen", table = "all_sequence",
-//            pkColumnName = "table_name", valueColumnName = "pk_value",
-//            allocationSize = 1)
     private Long id;
 
     @Column(unique = true)
@@ -43,4 +38,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne
+    // в данном случае не обязательно, т.к. по умолчанию возьмется название класса и его id. получится company_id
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

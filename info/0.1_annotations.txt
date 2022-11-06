@@ -29,3 +29,5 @@
     - (TemporalType.DATE) - аналог LocalDate
     - (TemporalType.TIME) - аналог LocalTime
 
+@ManyToOne - над полем класса, который вступает MANY к прикручиваемоц сущности;
+@JoinColumn - над полем и указываем имя колонки в БД для foreign key;

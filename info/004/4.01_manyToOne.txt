@@ -1,0 +1,20 @@
+У одного юзера может быть только одна компания:
+
+    - создаем pojo компании:
+
+    @Entity
+    public class Company {
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Integer id;
+
+        private String name;
+    }
+
+    - в юзера прикручиваем поле:
+
+      @ManyToOne
+        // в данном случае не обязательно, т.к. по умолчанию возьмется название класса и его id. получится company_id
+        @JoinColumn(name = "company_id")
+        private Company company;
