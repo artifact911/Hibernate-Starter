@@ -62,3 +62,12 @@ owned by users.id;
         id SERIAL PRIMARY KEY ,
         name VARCHAR(64) NOT NULL UNIQUE
     );
+
+4.12 - OneToOne
+    CREATE TABLE profile
+    (
+       id BIGSERIAL PRIMARY KEY ,
+       user_id BIGINT NOT NULL UNIQUE REFERENCES users(id),
+       street VARCHAR(128) ,
+       language CHAR(2)
+    );

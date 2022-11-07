@@ -10,7 +10,7 @@ import org.hibernate.type.SqlTypes;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "username")
-@ToString(exclude = "company")
+@ToString(exclude = {"company", "profile"})
 @Builder
 @Entity
 @Table(name = "users", schema = "public") // схема тут не обязательно, тк эта по умолчанию
@@ -38,8 +38,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     // в данном случае не обязательно, т.к. по умолчанию возьмется название класса и его id. получится company_id
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
 }
