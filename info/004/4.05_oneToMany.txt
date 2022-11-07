@@ -1,0 +1,36 @@
+@OneToMany - ставится над полем в классе, который является ONE для поля MANY. Простыми словами: У нашей Company много
+    сотрудников. Соответственно в классе Company есть поле List<User> users;
+
+    Реализовывать можно двумя способами:
+
+    1. @OneToMany
+       @JoinColumn(name = "company_id")
+       private List<User> users;
+
+       Указывая на колонку company_id в User
+       Такой вариант еще называется UniDirectional, т.к. для такого маппинга нам не обязательно иметь маппинг ManyToOne.
+           Т.е. в User мы можем закоменнтить Company и все будет работать.
+
+Но чаще всего @ManyToOne уже есть и мы добавляем @OneToMany и такая связь уже называется ByDirectional.
+    2. Тогда нам не нужен @JoinColumn, а использовать свойство из @OneToMany:
+
+         @OneToMany(mappedBy = "company")
+         private List<User> users;
+
+         где "company" - это поле из User.
+
+Если у нас List, то все будет ok. В дебаге можно увидеть, что в компании лежат юзеры как PersistentBag.
+    Но если мы сделаем Set<User>, то у нас произойдет замыкание, тк нудно будет вызывать equalsAndHashcode у юзера, тот
+    у компании, комапния у юзера и тд. В это случае, нам нужно исключить из equalsAndHashCode юзеров:
+
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @EqualsAndHashCode(exclude = "users")
+        @Builder
+        @Entity
+        public class Company {
+
+        }
+
+    Теперь в дебаге у компании юзеры представлены как PersistentSet
