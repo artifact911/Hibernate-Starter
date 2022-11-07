@@ -1,17 +1,14 @@
 package org.art.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "users")
 @Builder
 @Entity
 public class Company {
@@ -21,4 +18,8 @@ public class Company {
     private Integer id;
 
     private String name;
+
+    @OneToMany(mappedBy = "company")
+//    @JoinColumn(name = "company_id") // заюзали mappedBy
+    private Set<User> users;
 }

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 class HibernateRunnerTest {
 
+
     // Как Хибер под капотом парсит ответ из БД в JavaPojo
     @SneakyThrows
     @Test
