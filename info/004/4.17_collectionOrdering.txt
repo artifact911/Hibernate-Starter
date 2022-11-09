@@ -1,0 +1,40 @@
+Задача получить отсортированные списки из БД. Два варианта:
+    1. Сотрировка на уровне БД.
+        Есть две аннотации, которые можно поставить над полем для сортировки:
+            - import jakarta.persistence.OrderBy; Внутри мы пишем на HQL и value можно опустить
+
+        @OrderBy(value = "username DESC, personalInfo.lastname ASC")
+        private Set<User> users = new HashSet<>();
+
+            - import org.hibernate.annotations.OrderBy; Внутри пишем как обычную сортировку SQL опуская ORDER BY
+
+        @OrderBy(clause = "username DESC, lastname ASC")
+        private Set<User> users = new HashSet<>();
+
+    2. В памяти на уровне Java
+            - @OrderColumn - над полем коллекции. Сортировка на уровне JAVA. Требует поле int для сортировки.
+                Более того, должен быть строгий порядок например, если 1, 2, 3, 5, ... вместо 4 поставит null;
+                Удобно для Енамов, тк у них реализован ордеринг.
+
+            - Использовать реализацию TreeSet(). Но при селекте из БД нам придет PersistentSet и там порядок
+                не соблюдается. Тогда ставим аннотацию над полем @SortNatural
+
+                 @SortNatural
+                 private Set<User> users = new TreeSet<>();
+
+                Теперь идем в User и реализуем интерфейс Comparable:
+
+                public class User implements Comparable<User>
+
+                @Override
+                public int compareTo(User o) {
+                     return username.compareTo(o.username);
+                }
+
+            - Заюзать SortedSet, но он все равно просит @SortNatural
+
+                @SortNatural
+                private SortedSet<User> users = new TreeSet<>();
+
+            - @SortComparator() - но сюда придется написать и передать компаратор
+

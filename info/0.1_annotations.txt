@@ -44,3 +44,11 @@
 @CollectionTable(name = "company_locale") - для полей-коллекций для маппинга с таблицей;
 @AttributeOverride(name = "lang", column = @Column(name = "language")) - корректировка имени внутри объекта в
     листе на таблицу;
+
+@OrderBy(value = "username DESC, personalInfo.lastname ASC") - над полем коллекции. Сортировка на уровне БД HQL;
+@OrderBy(clause = "username DESC, lastname ASC") - над полем коллекции. Сортировка на уровне БД SQL;
+@OrderColumn - над полем коллекции. Сортировка на уровне JAVA. Требует поле int для сортировки. Более того, должен
+    быть строгий порядок например, если 1, 2, 3, 5, ... вместо 4 поставит null;
+
+@SortNatural - над полем коллекции. Сортировка на уровне JAVA. Реализуем в классе Comparable и юзаем;
+@SortComparator - над полем коллекции. Сортировка на уровне JAVA. Требует компаратор;

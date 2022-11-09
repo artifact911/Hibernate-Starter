@@ -19,7 +19,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "users", schema = "public") // схема тут не обязательно, тк эта по умолчанию
-public class User {
+public class User implements Comparable<User>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,4 +54,9 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<UserChat> userChats = new ArrayList<>();
+
+    @Override
+    public int compareTo(User o) {
+        return username.compareTo(o.username);
+    }
 }
