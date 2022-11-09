@@ -14,8 +14,10 @@ public class HibernateRunner4_16Test {
             session.beginTransaction();
 
             var company = session.get(Company.class, 1);
-            company.getLocales().add(LocaleInfo.of("ru", "Описание на русском"));
-            company.getLocales().add(LocaleInfo.of("en", "English description"));
+            var ru = LocaleInfo.of("ru", "Описание на русском");
+            var en = LocaleInfo.of("en", "English description");
+            company.getLocales().put(ru.getLang(), ru.getDescription());
+            company.getLocales().put(en.getLang(), en.getDescription());
 
             session.getTransaction().commit();
         }

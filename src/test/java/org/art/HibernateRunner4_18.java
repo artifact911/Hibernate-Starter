@@ -4,7 +4,7 @@ import org.art.entity.Company;
 import org.art.util.HibernateUtil;
 import org.junit.jupiter.api.Test;
 
-public class HibernateRunner4_17Test {
+public class HibernateRunner4_18 {
 
     @Test
     void checkOrdering() {
@@ -14,10 +14,9 @@ public class HibernateRunner4_17Test {
 
             var company = session.get(Company.class, 1);
 
-//            company.getUsers().forEach(System.out::println);
+            company.getUsers().forEach((k, v) -> System.out.println(v));
 
             session.getTransaction().commit();
         }
     }
 }
-

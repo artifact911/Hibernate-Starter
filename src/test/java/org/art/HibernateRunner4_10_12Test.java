@@ -53,7 +53,7 @@ public class HibernateRunner4_10_12Test {
         session.beginTransaction();
 
         Company company = session.get(Company.class, 1);
-        company.getUsers().removeIf(user -> user.getId().equals(2L));
+//        company.getUsers().removeIf(user -> user.getId().equals(2L));
 
 
         session.getTransaction().commit();
