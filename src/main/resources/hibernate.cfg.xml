@@ -16,6 +16,7 @@
         <mapping class="org.art.entity.Company"/>
         <mapping class="org.art.entity.Profile"/>
         <mapping class="org.art.entity.Chat"/>
+        <mapping class="org.art.entity.UserChat"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
     </session-factory>

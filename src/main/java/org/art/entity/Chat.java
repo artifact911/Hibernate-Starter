@@ -22,6 +22,6 @@ public class Chat {
     private String name;
 
     @Builder.Default
-    @ManyToMany(mappedBy = "chats")
-    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "chat")
+    private Set<UserChat> userChats = new HashSet<>();
 }
