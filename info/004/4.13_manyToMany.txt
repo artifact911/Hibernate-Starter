@@ -1,0 +1,19 @@
+Редко используемый маппинг.
+
+    @ManyToMany(mappedBy = "chats")
+    private Set<User> users = new HashSet<>();
+
+    CascadeType - тут не следует использовать, т.к. мы не хотим удалить всех пользователей при удалении чата, и не
+        хотим удалить все чаты при удалении пользователя.
+
+    @ManyToMany
+    @JoinTable(name = "users_chat",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "chat_id"))
+
+    Тут мы говорим:
+        - @JoinTable(name = "users_chat",  -  какая таблица промежуточная
+        - joinColumns = @JoinColumn(name = "user_id") - как называется колонка для нашей сущности, где мы пишем
+            маппинг ManyToMany
+        - inverseJoinColumns = @JoinColumn(name = "chat_id")) - как называется колонка в таблице users_chat, к которой
+            мы хотим присоединить поле chat

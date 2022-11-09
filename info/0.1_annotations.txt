@@ -38,3 +38,5 @@
 
 @JoinColumn - над полем и указываем имя колонки в БД для foreign key;
 @OneToMany - над полем класса, который является ONE по отношению к MANY-полю.
+@OneToOne
+@ManyToMany
