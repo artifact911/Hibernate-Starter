@@ -40,3 +40,7 @@
 @OneToMany - над полем класса, который является ONE по отношению к MANY-полю.
 @OneToOne
 @ManyToMany
+@ElementCollection - над полем, которое не является сущностью;
+@CollectionTable(name = "company_locale") - для полей-коллекций для маппинга с таблицей;
+@AttributeOverride(name = "lang", column = @Column(name = "language")) - корректировка имени внутри объекта в
+    листе на таблицу;
