@@ -28,7 +28,8 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    testImplementation 'com.h2database:h2:2.1.214'
+//    testImplementation 'com.h2database:h2:2.1.214'
+    testImplementation 'org.testcontainers:postgresql:1.17.6'
 }
 
 test {

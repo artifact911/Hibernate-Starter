@@ -9,7 +9,15 @@ import org.hibernate.cfg.Configuration;
 public class HibernateUtil {
 
     public static SessionFactory buildSessionFactory() {
+        Configuration configuration = buildConfiguration();
 
+        // configure() принимает путь к xml. Если не указывать - ищет в рутовых ресурсах проекта
+        configuration.configure();
+
+        return configuration.buildSessionFactory();
+    }
+
+    public static Configuration buildConfiguration() {
         // Этот класс служит для создания SessionFactory
         Configuration configuration = new Configuration();
 
@@ -25,10 +33,6 @@ public class HibernateUtil {
         // и не нужно было ставить над полями, а можно тут не писать, а поставить анноташку над конвертером
         // @Converter(autoApply = true)
         configuration.addAttributeConverter(new BirthdayConverter());
-
-        // configure() принимает путь к xml. Если не указывать - ищет в рутовых ресурсах проекта
-        configuration.configure();
-
-        return configuration.buildSessionFactory();
+        return configuration;
     }
 }
