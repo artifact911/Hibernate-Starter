@@ -40,3 +40,16 @@ HQL - hibernate query language
                             .setParameter("firstname", "Ivan")
                             .setParameter("comName", "Google")
                             .list();
+
+Именованные запросы. Юзают нечасто. Ставит над классом @NamedQuery() и передаем туда два параметра:
+    - name - просто называем как-то наш запрос
+    - query - сам запрос.
+    Тогда вызов будет таким:
+
+        var result = session.createNamedQuery("findUserByName", User.class)
+                            .setParameter("firstname", "Ivan")
+                            .setParameter("comName", "Google")
+                            .list();
+
+        "findUserByName" - имя именованного запроса
+        User.class - маппинг и где лежит запрос
