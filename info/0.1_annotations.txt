@@ -65,3 +65,6 @@
     наследника в БД (дополнение к @DiscriminatorColumn);
 
 @PrimaryKeyJoinColumn(name = "id") - над классом-наследником, для указания, что будет использоваться как fkey;
+
+
+@NamedQuery - именованные HQL-запросы;

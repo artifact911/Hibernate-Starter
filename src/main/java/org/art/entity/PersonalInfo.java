@@ -1,11 +1,12 @@
 package org.art.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +20,5 @@ public class PersonalInfo {
 
     // перепишем в  configuration.addAttributeConverter(new BirthdayConverter());
 //    @Convert(converter = BirthdayConverter.class)
-    private Birthday birthDate;
+    private LocalDate birthDate;
 }
