@@ -1,0 +1,42 @@
+HQL - hibernate query language
+
+    HQL аперирует сущностями Java.
+
+    SQL -  select u.* from users u where u.firstname = 'Ivan'
+    HQL -  session.createQuery("select u from User u where u.personalInfo.firstname = 'Ivan'");
+         session.createQuery("select u from User u where u.personalInfo.firstname = 'Ivan'", User.class);
+
+Как и в JDBC можно заюзать prepareStatement:
+    1. (нежелательный)
+
+        var result = session.createQuery(
+                            "select u from User u where u.personalInfo.firstname = ?1", User.class)
+                            .setParameter(1, "Ivan")
+                            .list();
+
+    2. Эти индексы могут сбиться рано или поздно поэтому вариант 2
+
+         var result = session.createQuery(
+                            "select u from User u where u.personalInfo.firstname = :firstname", User.class)
+                            .setParameter("firstname", "Ivan")
+                            .list();
+
+Можно юзать Joins:
+
+     var result = session.createQuery(
+                        "select u from User u " +
+                                "join u.company c " +
+                                "where u.personalInfo.firstname = :firstname and c.name = :comName", User.class)
+                        .setParameter("firstname", "Ivan")
+                        .setParameter("comName", "Google")
+                        .list();
+
+     Можно юзать джоины неявно, но лучше не ннадо. Плохо читать
+
+         var result = session.createQuery(
+                            "select u from User u " +
+                                    "where u.personalInfo.firstname = :firstname and u.company.name = :comName",
+                                    User.class)
+                            .setParameter("firstname", "Ivan")
+                            .setParameter("comName", "Google")
+                            .list();
