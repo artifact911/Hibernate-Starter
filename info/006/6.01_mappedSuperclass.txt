@@ -1,0 +1,20 @@
+Задача: мы хотим вынести какие-то общие поля в суперкласс, который не является самостоятельной сущностью.
+    id - в суперКласс не получится, тк мы можем нарваться на легаси таблицы и тогда мы не сможем применять это поле
+        для разных стратегий генерации id. Но мы знаем, что любой id имеет геттер и сеттер, значит мы можем сделать на
+        этом основании интерфейс и прикручивать его всем, кому надо. Более того, интерфейс мы можем параметризовать
+        и не зависеть от типа данных id-поля (id должен реализовывать Serializable)
+
+        public interface BaseEntity<T extends Serializable> {
+            void setId(T id);
+            T getId();
+        }
+
+    auditEntity - какие-то несамомтоятельные сущности, которые мы хотим вынести в суперКласс. С ними получится:
+
+        @Getter
+        @Setter
+        @MappedSuperclass
+        public abstract class AuditableEntity<T extends Serializable> implements BaseEntity<T> {
+            private Instant createdAt;
+            private String createdBy;
+        }

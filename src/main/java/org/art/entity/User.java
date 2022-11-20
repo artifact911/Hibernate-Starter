@@ -1,15 +1,12 @@
 package org.art.entity;
 
 import jakarta.persistence.*;
-
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +16,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "users", schema = "public") // схема тут не обязательно, тк эта по умолчанию
-public class User implements Comparable<User>{
+public class User implements Comparable<User>, BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
