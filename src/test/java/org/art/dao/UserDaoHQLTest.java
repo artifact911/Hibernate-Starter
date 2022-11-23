@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @TestInstance(PER_CLASS)
-public class UserDaoTest {
+public class UserDaoHQLTest {
 
     private final SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
-    private final UserDao userDao = UserDao.getInstance();
+    private final UserDaoHQL userDaoHQL = UserDaoHQL.getInstance();
 
     @BeforeAll
     public void initDb() {
@@ -37,7 +37,7 @@ public class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        List<User> results = userDao.findAll(session);
+        List<User> results = userDaoHQL.findAll(session);
 //        assertEquals(5, results.size());
         assertThat(results).hasSize(5);
 
@@ -53,7 +53,7 @@ public class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        List<User> results = userDao.findAllByFirstName(session, "Bill");
+        List<User> results = userDaoHQL.findAllByFirstName(session, "Bill");
 
         assertThat(results).hasSize(1);
         assertThat(results.get(0).fullName()).isEqualTo("Bill Gates");
@@ -67,7 +67,7 @@ public class UserDaoTest {
         session.beginTransaction();
 
         int limit = 3;
-        List<User> results = userDao.findLimitedUsersOrderedByBirthday(session, limit);
+        List<User> results = userDaoHQL.findLimitedUsersOrderedByBirthday(session, limit);
         assertThat(results).hasSize(limit);
 
         List<String> fullNames = results.stream().map(User::fullName).collect(toList());
@@ -81,7 +81,7 @@ public class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        List<User> results = userDao.findAllByCompanyName(session, "Google");
+        List<User> results = userDaoHQL.findAllByCompanyName(session, "Google");
         assertThat(results).hasSize(2);
 
         List<String> fullNames = results.stream().map(User::fullName).collect(toList());
@@ -95,7 +95,7 @@ public class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        List<Payment> applePayments = userDao.findAllPaymentsByCompanyName(session, "Apple");
+        List<Payment> applePayments = userDaoHQL.findAllPaymentsByCompanyName(session, "Apple");
         assertThat(applePayments).hasSize(5);
 
         List<Integer> amounts = applePayments.stream().map(Payment::getAmount).collect(toList());
@@ -109,7 +109,7 @@ public class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        Double averagePaymentAmount = userDao.findAveragePaymentAmountByFirstAndLastNames(session, "Bill", "Gates");
+        Double averagePaymentAmount = userDaoHQL.findAveragePaymentAmountByFirstAndLastNames(session, "Bill", "Gates");
         assertThat(averagePaymentAmount).isEqualTo(300.0);
 
         session.getTransaction().commit();
@@ -120,7 +120,7 @@ public class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        List<Object[]> results = userDao.findCompanyNamesWithAvgUserPaymentsOrderedByCompanyName(session);
+        List<Object[]> results = userDaoHQL.findCompanyNamesWithAvgUserPaymentsOrderedByCompanyName(session);
         assertThat(results).hasSize(3);
 
         List<String> orgNames = results.stream().map(a -> (String) a[0]).collect(toList());
@@ -137,7 +137,7 @@ public class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        List<Object[]> results = userDao.isItPossible(session);
+        List<Object[]> results = userDaoHQL.isItPossible(session);
         assertThat(results).hasSize(2);
 
         List<String> names = results.stream().map(r -> ((User) r[0]).fullName()).collect(toList());

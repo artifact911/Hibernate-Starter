@@ -15,6 +15,8 @@ public class TestDataImporter {
     public void importData(SessionFactory sessionFactory) {
         @Cleanup Session session = sessionFactory.openSession();
 
+        session.beginTransaction();
+
         Company microsoft = saveCompany(session, "Microsoft");
         Company apple = saveCompany(session, "Apple");
         Company google = saveCompany(session, "Google");
@@ -48,13 +50,15 @@ public class TestDataImporter {
         savePayment(session, dianeGreene, 300);
         savePayment(session, dianeGreene, 300);
         savePayment(session, dianeGreene, 300);
+
+        session.getTransaction().commit();
     }
 
     private Company saveCompany(Session session, String name) {
         Company company = Company.builder()
                 .name(name)
                 .build();
-        session.save(company);
+        session.persist(company);
 
         return company;
     }
@@ -70,7 +74,7 @@ public class TestDataImporter {
                         .build())
                 .company(company)
                 .build();
-        session.save(user);
+        session.persist(user);
 
         return user;
     }
@@ -80,6 +84,6 @@ public class TestDataImporter {
                 .receiver(user)
                 .amount(amount)
                 .build();
-        session.save(payment);
+        session.persist(payment);
     }
 }

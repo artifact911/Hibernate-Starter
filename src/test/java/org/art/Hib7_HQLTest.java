@@ -1,11 +1,9 @@
 package org.art;
 
 import jakarta.persistence.FlushModeType;
-import jakarta.persistence.QueryHint;
 import org.art.entity.User;
 import org.art.util.HibernateTestUtil;
 import org.hibernate.jpa.AvailableHints;
-import org.hibernate.jpa.QueryHints;
 import org.junit.jupiter.api.Test;
 
 public class Hib7_HQLTest {

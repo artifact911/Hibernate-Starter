@@ -1,0 +1,53 @@
+UserDaoCriteria.class
+Criteria удобна для написания динамических where (пример фильтров на сайте), где какой-то параметр может быть, а может
+    и не быть.
+
+    Для того, чтобы избежать подобного хардкода полей в виде строк,
+         criteria.select(user).where(
+                        cb.equal(
+                                user.get("personalInfo").get("firstName"),
+                                firstName
+                        ));
+    подключим зависимость:
+        annotationProcessor 'org.hibernate:hibernate-jpamodelgen:6.1.5.Final'
+
+    теперь в билде запускам таску classes. Консоль:
+        BUILD SUCCESSFUL in 842ms
+        2 actionable tasks: 2 executed
+        Note: Hibernate JPA 2 Static-Metamodel Generator 6.1.5.Final
+        15:44:39: Execution finished 'classes'.
+    У нас сформировалась статик модель. -> перейдем в папку билд и посмотрим на наши скомпиленные файлы. В папке
+        build/generated/sources/annotationProcessor/java мы видим много наших классов с постфиксом_. И в этих классах
+        теперь у нас есть константы с именами наших полей и мы иожем их юзать:
+             criteria.select(user).where(
+                            cb.equal(
+                                    user.get(User_.personalInfo).get(PersonalInfo_.firstname),
+                                    firstName
+                            ));
+
+    // что возвращаем
+    var criteria = cb.createQuery(User.class);
+    // это прежний from
+    var company = criteria.from(Company.class);
+    // это join
+    var users = company.join(Company_.users);
+
+Плавающий where делается так:
+      List<Predicate> predicates = new ArrayList<>();
+            if (firstName != null) {
+                predicates.add(cb.equal(user.get(User_.personalInfo).get(PersonalInfo_.firstname), firstName));
+            }
+            if (lastName != null) {
+                predicates.add(cb.equal(user.get(User_.personalInfo).get(PersonalInfo_.lastname), lastName));
+            }
+
+            criteria.select(cb.avg(payment.get(Payment_.amount))).where(
+                    predicates.toArray(Predicate[]::new)
+            );
+
+            return session.createQuery(criteria).uniqueResult();
+
+criteria.multiselect() - позволяет вернуть массив объектов;
+
+Критерия позволяет использовать кастомные ДТО. запили тут findCompanyNamesWithAvgUserPaymentsOrderedByCompanyNameDto()
+    Возвращение объекта типа Tuple или customDTO в Hibernate запросах называется еще Projection(рпоекция на сущность)

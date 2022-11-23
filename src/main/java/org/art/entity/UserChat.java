@@ -9,7 +9,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper=false)
 @Entity(name = "users_chat")
 public class UserChat extends AuditableEntity<Long>{
 

@@ -9,9 +9,9 @@ import org.hibernate.Session;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserDao {
+public class UserDaoHQL {
 
-    private static final UserDao INSTANCE = new UserDao();
+    private static final UserDaoHQL INSTANCE = new UserDaoHQL();
 
     /**
      * Возвращает всех сотрудников
@@ -105,7 +105,7 @@ public class UserDao {
                 .list();
     }
 
-    public static UserDao getInstance() {
+    public static UserDaoHQL getInstance() {
         return INSTANCE;
     }
 }
