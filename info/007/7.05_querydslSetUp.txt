@@ -1,0 +1,36 @@
+На 6.1.5 Хибера не взлетело
+
+QueryDsl может генерировать классы не только на основании HibernateEntities, но и на основании схемы БД
+    (com.querydsl:querydsl-sql)
+
+Установка:
+    1. Чтоб не хардходить имена полей (как в Criteria_.class) мы подключим плагин для querydsl:
+         id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+
+    2. Добавин некоторые зависимости:
+        implementation 'com.querydsl:querydsl-jpa:5.0.0'
+        annotationProcessor 'com.querydsl:querydsl-apt:5.0.0'
+
+    3. Теперь нужно изменить грэдл-таски, которые нам добавил плагин и указать какую именно модель мы будем
+        генерировать и где generatedSrc будет лежать.
+            querydsl {
+                // юзаем jpaAnnotationProcessor
+                jpa = true
+
+                // переопределям место генерации наших классов (по-умолчанию там бред)
+                querydslSourcesDir = "$buildDir/generated/sources/anotationProcessor/java/main"
+            }
+
+            compileQuerydsl {
+                options.annotationProcessorPath = configurations.querydsl
+            }
+
+    4. Конфликтуем с Ломбок, тк используется и там annotationProcessor. Нам нужно подправить querydsl конфигурацию
+        configurations {
+            querydsl.extendsFrom implementation, runtimeOnly, annotationProcessor, testImplementation,
+                    testRuntimeOnly, compileOnly, testCompileOnly, testAnnotationProcessor
+        }
+        Дописали тупо те штуки, которые мы вообще юзаем в зависимостях.
+
+    5. Новая проблема: Unable to load class 'javax.persistence.Entity'.
+        implementation 'javax.annotation:javax.annotation-api:1.3.2'
