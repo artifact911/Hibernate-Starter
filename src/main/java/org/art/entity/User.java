@@ -47,8 +47,8 @@ public class User implements Comparable<User>, BaseEntity<Long> {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Profile profile;
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Profile profile;
 
     @Builder.Default
     @OneToMany(mappedBy = "user")

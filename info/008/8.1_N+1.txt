@@ -1,0 +1,29 @@
+Getting started:
+    1. Поднимем контейнер с реальной базой
+    2. Скопируем TestDataImporter.class из тестов в main
+    3. В hibernate.cfg.xml:
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+    4. В HibernateRunner заполним БД
+          public static void main(String[] args) {
+                try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
+                    TestDataImporter.importData(sessionFactory);
+                }
+            }
+
+    5. Обноыим БД -> база заполнилась данными
+    6. В hibernate.cfg.xml:
+         <property name="hibernate.hbm2ddl.auto">validate</property>
+
+    7. Удалим импортер данных из main
+         TestDataImporter.importData(sessionFactory);
+
+Работа:
+    Сейчас вызвыав:
+        session.beginTransaction();
+        var user = session.get(User.class, 1L);
+        session.getTransaction().commit();
+
+    Мы получим 2 запроса. Один на юзера, второй на профайл в другую таблицу. Это из-за oneToOne bidirectional связи.
+    Отсюда первое правило: Не использовать oneToOne bidirectional связи тогда, когда в профайле наш первичный ключ является
+    синтаксическим.

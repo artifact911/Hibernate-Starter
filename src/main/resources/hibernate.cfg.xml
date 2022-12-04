@@ -12,6 +12,12 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
 
+<!--        create сделали единожды для создания базы-->
+<!--        <property name="hibernate.hbm2ddl.auto">create</property>-->
+
+<!--        validate теперь просто для проверки соответствия БД-->
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+
         <mapping class="org.art.entity.User"/>
         <mapping class="org.art.entity.Company"/>
         <mapping class="org.art.entity.Profile"/>
@@ -19,6 +25,6 @@
         <mapping class="org.art.entity.UserChat"/>
         <mapping class="org.art.entity.Payment"/>
         <!-- DB schema will be updated if needed -->
-        <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+
     </session-factory>
 </hibernate-configuration>
