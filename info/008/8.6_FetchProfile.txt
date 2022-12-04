@@ -1,0 +1,17 @@
+@FetchProfile() - репитебл, можно ставить много штук
+    - не работает в HQL где я не использую getById
+
+    @FetchProfile(name = "withCompany", fetchOverrides = {
+            @FetchProfile.FetchOverride(
+                    entity = User.class, association = "company", mode = FetchMode.JOIN
+            )
+    })
+
+    name = "withCompany" - сами назвали этот профайл;
+    entity = User.class - в какой сущности мы переопределяем это;
+    association = "company" - какое поле хотим получить сразу с сущностью;
+    mode = FetchMode.JOIN - каким способом (Это тот самый FetchMode.SUBSELECT/Join/Select)
+
+когда мы написали такой провайл, в месте, где м ходим его заюзать, мы должны его активировать:
+    session.beginTransaction();
+        session.enableFetchProfile("withCompany");
