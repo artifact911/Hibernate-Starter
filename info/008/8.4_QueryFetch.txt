@@ -1,0 +1,7 @@
+Для того, чтобы просто доставать все, что нам нужно в пределах одного запроса используя fetchJoin:
+      var users = session.createQuery("select u from User u " +
+                        "join fetch u.payments " +
+                        "join fetch u.company " +
+                        "where 1 = 1", User.class).list();
+
+Простыми словами, выполнится один запрос с джоинами и в селекте мы увидим все требуемые запрашиваемые поля
