@@ -3,9 +3,16 @@ package org.art;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.art.entity.User;
+import org.art.entity.UserChat;
 import org.art.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.graph.GraphSemantic;
+import org.hibernate.graph.RootGraph;
+import org.hibernate.graph.SubGraph;
+import org.hibernate.jpa.QueryHints;
+
+import java.util.Map;
 
 @Slf4j
 public class HibernateRunner {
@@ -16,22 +23,46 @@ public class HibernateRunner {
              Session session = sessionFactory.openSession()) {
 
             session.beginTransaction();
-            session.enableFetchProfile("withCompanyAndPayment");
+//            session.enableFetchProfile("withCompanyAndPayment");
+//            RootGraph<?> graph = session.getEntityGraph("withCompanyAndChat");
 
-            var user = session.get(User.class, 1L);
+            var userRootGraph = createGraph(session);
 
-            var company = user.getCompany();
+
+
+            Map<String, Object> properties = Map.of(
+                    GraphSemantic.LOAD.getJakartaHintName(), userRootGraph
+            );
+            var user = session.find(User.class, 1L, properties);
+
+            System.out.println(user.getCompany().getName());
+            System.out.println(user.getUserChats().size());
+
+
+            // get не стработает с Граф
+//            var user = session.get(User.class, 1L);
+//            var company = user.getCompany();
 //            var payments = user.getPayments();
 
-//            var users = session.createQuery("select u from User u " +
-//                    "join fetch u.payments " +
-//                    "join fetch u.company " +
-//                    "where 1 = 1", User.class).list();
-//
-//            users.forEach(user -> System.out.println(user.getPayments().size()));
-//            users.forEach(user -> System.out.println(user.getCompany().getName()));
+            var users = session.createQuery(
+                            "select u from User u " +
+                                    "where 1 = 1", User.class)
+                    .setHint(GraphSemantic.LOAD.getJakartaHintName(), userRootGraph)
+                    .list();
+
+            users.forEach(it -> System.out.println(it.getUserChats().size()));
+            users.forEach(it -> System.out.println(it.getCompany().getName()));
 
             session.getTransaction().commit();
         }
+    }
+
+    private static RootGraph<User> createGraph(Session session) {
+        var userGraph = session.createEntityGraph(User.class);
+        userGraph.addAttributeNodes("company", "userChats");
+        var userChatSubGraph = userGraph.addSubgraph("userChats", UserChat.class);
+        userChatSubGraph.addAttributeNodes("chat");
+
+        return userGraph;
     }
 }

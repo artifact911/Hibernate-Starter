@@ -1,0 +1,42 @@
+EntityGraphs - самое мощное средство из рассмотренных. Работает как при поиске по Id, так и в HQL запросах.
+    Кроме того, есть поддержка subgraphs. Реализовать можно как в виде аннотаций, так и через session.
+    Репитбл + ставится над сущностью
+    - GraphSemantic.LOAD - используем те FetchType, которые расставили в сужностях;
+    - GraphSemantic.FETCH - используем те FetchType.LAZY независимо от того, что в сущностях;
+
+    1. Аннотация
+        @NamedEntityGraph(name = "withCompanyAndChat",
+                attributeNodes = {
+                        @NamedAttributeNode("company"),
+                        @NamedAttributeNode(value = "userChats", subgraph = "chats")
+                },
+                subgraphs = {
+                @NamedSubgraph(name = "chats", attributeNodes = @NamedAttributeNode("chat"))
+                }
+        )
+
+    Теперь в main нужно активироать граф:
+        RootGraph<?> graph = session.getEntityGraph("withCompanyAndChat");
+
+    Метод get сессии тут не срабоает. Вместо него:
+         Map<String, Object> properties = Map.of(
+                            GraphSemantic.LOAD.getJakartaHintName(), graph
+                    );
+         var user = session.find(User.class, 1L, properties);
+         System.out.println(user.getCompany().getName());
+         System.out.println(user.getUserChats().size());
+
+
+    // то же в HQL
+         var users = session.createQuery(
+                            "select u from User u " +
+                            "where 1 = 1", User.class)
+                            .setHint(GraphSemantic.LOAD.getJakartaHintName(), graph)
+                            .list();
+
+
+    2. На Java:
+          var userGraph = session.createEntityGraph(User.class);
+                userGraph.addAttributeNodes("company", "userChats");
+                var userChatSubGraph = userGraph.addSubgraph("userChats", UserChat.class);
+                userChatSubGraph.addAttributeNodes("chat");
