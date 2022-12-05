@@ -1,0 +1,14 @@
+ session.setReadOnly(); - для конкретной сущности;
+ session.setDefaultReadOnly(true); - для всех сущностей в сессии;
+
+    Теперь если мы запустим какой-то update - ничего не изменится. В консоле мы увидим только селект и никакого
+        апдэйта.
+
+        Так же можно и тут (аналог для конкретной сущности, а тут для запроса):
+         session.createQuery("select p from Payment p", Payment.class)
+                   .setReadOnly(true)
+                  // .setHint(QueryHints.READ_ONLY, true) // равно верхнему
+                   .list();
+
+ Это на уровне приложения. А можно на уровне БД и тогда, при попытке что-то изменить пробросится исключение:
+    session.createNativeQuery("SET TRANSACTION READ ONLY;").executeUpdate();

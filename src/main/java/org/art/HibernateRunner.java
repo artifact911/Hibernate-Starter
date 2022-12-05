@@ -8,7 +8,6 @@ import org.art.entity.Payment;
 import org.art.entity.User;
 import org.art.entity.UserChat;
 import org.art.util.HibernateUtil;
-import org.art.util.TestDataImporter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.graph.GraphSemantic;
@@ -25,17 +24,19 @@ public class HibernateRunner {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
 
-            // такие hints можно найти в классе:
-            // org.hibernate.cfg.AvailableSettings
-            session.createQuery("select p from Payment p", Payment.class)
-                    .setLockMode(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
-                    .setHint("javax.persistence.lock.timeout", 5000)
-//                    .setTimeout(5000)
-                    .list();
+            session.setDefaultReadOnly(true);
 
             session.beginTransaction();
 
-            var payment = session.find(Payment.class, 1L, LockModeType.PESSIMISTIC_READ);
+            // такие hints можно найти в классе:
+            // org.hibernate.cfg.AvailableSettings
+//            session.createQuery("select p from Payment p", Payment.class)
+//                    .setLockMode(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
+//                    .setHint("javax.persistence.lock.timeout", 5000)
+////                    .setTimeout(5000)
+//                    .list();
+
+            var payment = session.find(Payment.class, 1L);
             payment.setAmount(payment.getAmount() + 10);
 
             session.getTransaction().commit();
