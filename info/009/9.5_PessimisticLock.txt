@@ -1,0 +1,31 @@
+PessimisticLock - на уровне БД.
+
+    var payment = session.find(Payment.class, 1L, LockModeType.PESSIMISTIC_READ);
+
+     У нас произошло зависание из-за того, что она транзакция стала ждать, пока другая отпустит. Если мы посмотрим
+        в консоль, то увидим, что в запросе в where есть for share - в разных СУБД по разному. Если посмотреть в
+        документацию, то мы увидим, что это row-level Locks и он блокирует строку в которой мы работаем. Так же в доке
+        написано, что for share блокирует UPDATE, DELETE, SELECT FOR UPDATE, SELECT FOR NO KEY UPDATE, следовательно
+        будь это обычный SELECT, то блокировки не было бы. У нас UPDATE.
+
+     var payment = session.find(Payment.class, 1L, LockModeType.PESSIMISTIC_WRITE);
+
+     Зависли так же, но теперь в запросе for update. Читаем доку и видим, что он блокирует. Очевидно наш UPDATE тут.
+
+     var payment = session.find(Payment.class, 1L, LockModeType.PESSIMISTIC_FORCE_INCREMENT);
+
+     По сути обычная пессимистическая блокировка, но дополнительно нужна еще пессимистическая блокировка. Нужно добавить
+        снова поле version.
+        И снова мы зависли на update, тк FORCE говорит обновить версию полюбасу, даже если мы ничего не апдэйтили.
+
+Осталось решить, как убрать эти зависания. Все просто: можно устанавливать таймауты.
+
+    // такие hints можно найти в классе:
+    // org.hibernate.cfg.AvailableSettings
+    session.createQuery("select p from Payment p", Payment.class)
+           .setLockMode(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
+           .setHint("javax.persistence.lock.timeout", 5000)
+           //.setTimeout(5000)
+           .list();
+
+    Все это можно повторить и для метода find() с пропертями либо метод get() и там LockOptions и все можно накрутить

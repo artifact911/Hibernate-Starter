@@ -25,14 +25,20 @@ public class HibernateRunner {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
 
-            TestDataImporter.importData(sessionFactory);
+            // такие hints можно найти в классе:
+            // org.hibernate.cfg.AvailableSettings
+            session.createQuery("select p from Payment p", Payment.class)
+                    .setLockMode(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
+                    .setHint("javax.persistence.lock.timeout", 5000)
+//                    .setTimeout(5000)
+                    .list();
 
-           session.beginTransaction();
+            session.beginTransaction();
 
-            var payment = session.find(Payment.class, 1L);
+            var payment = session.find(Payment.class, 1L, LockModeType.PESSIMISTIC_READ);
             payment.setAmount(payment.getAmount() + 10);
 
-           session.getTransaction().commit();
+            session.getTransaction().commit();
         }
     }
 

@@ -12,8 +12,8 @@ import org.hibernate.annotations.OptimisticLocking;
 //@EqualsAndHashCode(exclude = "version")
 @Builder
 @Entity
-@OptimisticLocking(type = OptimisticLockType.ALL)
-@DynamicUpdate
+//@OptimisticLocking(type = OptimisticLockType.ALL)
+//@DynamicUpdate
 public class Payment implements BaseEntity<Long> {
 
     @Id
