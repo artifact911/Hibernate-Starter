@@ -18,6 +18,9 @@
 <!--        validate теперь просто для проверки соответствия БД-->
         <property name="hibernate.hbm2ddl.auto">validate</property>
 
+<!--        установка уровня изолированности транзакций-->
+<!--        <property name="hibernate.connection.isolation">8</property>-->
+
         <mapping class="org.art.entity.User"/>
         <mapping class="org.art.entity.Company"/>
         <mapping class="org.art.entity.Profile"/>

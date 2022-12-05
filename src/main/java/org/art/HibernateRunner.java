@@ -1,5 +1,6 @@
 package org.art;
 
+import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.art.entity.User;
@@ -9,8 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.graph.GraphSemantic;
 import org.hibernate.graph.RootGraph;
-import org.hibernate.graph.SubGraph;
-import org.hibernate.jpa.QueryHints;
 
 import java.util.Map;
 
@@ -18,7 +17,17 @@ import java.util.Map;
 public class HibernateRunner {
 
     @SneakyThrows
+    @Transactional
     public static void main(String[] args) {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.doWork(connection -> System.out.println(connection.getTransactionIsolation()));
+
+        }
+    }
+
+    private static void before9main() {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
 
@@ -27,7 +36,6 @@ public class HibernateRunner {
 //            RootGraph<?> graph = session.getEntityGraph("withCompanyAndChat");
 
             var userRootGraph = createGraph(session);
-
 
 
             Map<String, Object> properties = Map.of(
