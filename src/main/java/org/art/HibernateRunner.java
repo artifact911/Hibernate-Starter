@@ -1,11 +1,14 @@
 package org.art;
 
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.art.entity.Payment;
 import org.art.entity.User;
 import org.art.entity.UserChat;
 import org.art.util.HibernateUtil;
+import org.art.util.TestDataImporter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.graph.GraphSemantic;
@@ -22,8 +25,14 @@ public class HibernateRunner {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
 
-            session.doWork(connection -> System.out.println(connection.getTransactionIsolation()));
+            TestDataImporter.importData(sessionFactory);
 
+           session.beginTransaction();
+
+            var payment = session.find(Payment.class, 1L, LockModeType.OPTIMISTIC);
+            payment.setAmount(payment.getAmount() + 10);
+
+           session.getTransaction().commit();
         }
     }
 

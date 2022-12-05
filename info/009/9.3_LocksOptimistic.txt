@@ -1,0 +1,37 @@
+Для решения наших проблем, оговоренных в уроках ранее, существуют
+    - оптимистические блокировки - решаются с помощью Java-приложения
+    - пессимистические блокировки - решаются с помощью СУБД
+
+    LockModeType.xxx
+        - NONE
+        - READ - усталел и вместо него сработает OPTIMISTIC
+        - WRITE - усталел и вместо него сработает OPTIMISTIC_FORCE_INCREMENT
+        - OPTIMISTIC - Изменит в БД ТОЛЬКО тогда, когда мы что-то изменим
+        - OPTIMISTIC_FORCE_INCREMENT - изменит в БД в ЛЮБОМ случае
+        - PESSIMISTIC_READ
+        - PESSIMISTIC_WRITE
+        - PESSIMISTIC_FORCE_INCREMENT
+
+Optimistic:
+
+    // OPTIMISTIC - решается на уровне приложения, поэтому его тут указывать необязательно
+    session.find(Payment.class, 1L, LockModeType.OPTIMISTIC);
+
+    Для этого идем в сущность и:
+
+        @OptimisticLocking(type = OptimisticLockType.VERSION)
+        public class Payment implements BaseEntity<Long>
+
+    OptimisticLockType.xxx
+        - VERSION - создаем поле, которое будет содержать версию нашей строчки.
+              @Version
+              private Long version;
+
+            Теперь, когда мы создадим эту сущность, ее версия будет 0, как только изменим, станет 1 и т.д. И выполняя
+                запросы мы будем делать where еще и по версии.
+            (создали новое поле, надо пересоздать таблицу)
+               <property name="hibernate.hbm2ddl.auto">create</property>
+
+        - ALL
+        - DIRTY
+        - NONE
