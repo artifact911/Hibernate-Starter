@@ -2,6 +2,7 @@ package org.art.util;
 
 import lombok.experimental.UtilityClass;
 import org.art.converter.BirthdayConverter;
+import org.art.interceptor.GlobalInterceptor;
 import org.art.listener.AuditTableListener;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -51,6 +52,7 @@ public class HibernateUtil {
         // и не нужно было ставить над полями, а можно тут не писать, а поставить анноташку над конвертером
         // @Converter(autoApply = true)
         configuration.addAttributeConverter(new BirthdayConverter());
+        configuration.setInterceptor(new GlobalInterceptor());
         return configuration;
     }
 }

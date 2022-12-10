@@ -1,0 +1,14 @@
+ввиду того, что интерсептор имеет иножетсво методов, мы может создать его один на все приложение.
+
+Создаем наш кастомный интерсептор, наследуется от EmptyInterceptor, регистрируем в хиберКонфигурации
+     configuration.setInterceptor(new GlobalInterceptor());
+и переопределяем нужный метод.
+
+Но можем прикрутить интерсептор для отдельной сессии. ПОМНИМ, что он может быть тоько один на все приложение.
+     try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+                 Session session = sessionFactory
+                         .withOptions()
+                         .interceptor(new GlobalInterceptor())
+                         .openSession())
+
+!!! Лучше юзать Лисенеры
