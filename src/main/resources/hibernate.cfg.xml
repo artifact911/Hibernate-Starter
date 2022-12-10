@@ -27,6 +27,8 @@
         <mapping class="org.art.entity.Chat"/>
         <mapping class="org.art.entity.UserChat"/>
         <mapping class="org.art.entity.Payment"/>
+        <mapping class="org.art.entity.Audit"/>
+
         <!-- DB schema will be updated if needed -->
 
     </session-factory>

@@ -6,7 +6,7 @@ import org.art.entity.AuditableEntity;
 
 import java.time.Instant;
 
-public class AuditListener {
+public class AuditDatesListener {
 
     @PrePersist
     public void prePersist(AuditableEntity<?> entity) {
