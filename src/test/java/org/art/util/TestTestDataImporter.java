@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 @UtilityClass
-public class TestDataImporter {
+public class TestTestDataImporter {
 
     public void importData(SessionFactory sessionFactory) {
         @Cleanup Session session = sessionFactory.openSession();

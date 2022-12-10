@@ -1,0 +1,22 @@
+Есть готовая либа для аудита
+    implementation 'org.hibernate:hibernate-envers:6.1.5.Final'
+
+    Над классом ставим @Audited
+        @Audited
+        public class Payment
+
+    Если есть поля @OneToMany или @ManyToOne и т.д. то тогда с ними тож надо решать:
+         @NotAudited
+         @ManyToOne(optional = false, fetch = FetchType.LAZY)
+         @JoinColumn(name = "receiver_id")
+         private User receiver;
+    в таком случае не аудируем. Либо внутри класса Юзер, ставим @Audited тож и его аудируем тож.
+
+Теперь хибер создаст доп таблицу payment_aud + revinfo и принцип работы как в гите: в revinfo предыдущее состяние.
+
+    Для полей сущностей в маппингах мы можем не ставить @NotAudited а в классе Payment, в этом случае, проставить так:
+         @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+         public class Payment
+
+    Такая мулька (выше) прокатит только с сущностями. С коллекциями продолжаем юзать @NotAudited
+

@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.FetchProfile;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "users", schema = "public") // схема тут не обязательно, тк эта по умолчанию
+@Audited
 public class User implements Comparable<User>, BaseEntity<Long> {
 
     @Id
@@ -71,10 +74,12 @@ public class User implements Comparable<User>, BaseEntity<Long> {
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
+    @NotAudited
     private List<UserChat> userChats = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "receiver")
+    @NotAudited
     private List<Payment> payments = new ArrayList<>();
 
     @Override

@@ -21,7 +21,8 @@ public class HibernateUtil {
 
         var sessionFactory = configuration.buildSessionFactory();
 
-        registerListeners(sessionFactory);
+        // выпилил, т.к. прикрутили либу для аудита
+//        registerListeners(sessionFactory);
 
         return sessionFactory;
     }

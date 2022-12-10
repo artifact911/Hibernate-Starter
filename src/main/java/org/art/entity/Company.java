@@ -1,9 +1,10 @@
 package org.art.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SortNatural;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +13,9 @@ import java.util.TreeMap;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "name")
 @Builder
 @Entity
+@Audited
 public class Company {
 
     @Id
@@ -28,6 +29,7 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @MapKey(name = "username")
     @SortNatural
+    @NotAudited
     private Map<String, User> users = new TreeMap<>();
 
     @Builder.Default
@@ -35,6 +37,7 @@ public class Company {
     @CollectionTable(name = "company_locale", joinColumns = @JoinColumn(name = "company_id"))
     @Column(name = "description")
     @MapKeyColumn(name = "lang")
+    @NotAudited
     private Map<String, String> locales = new HashMap<>();
 
     public void addUser(User user) {

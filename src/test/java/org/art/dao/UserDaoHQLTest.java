@@ -4,7 +4,7 @@ import lombok.Cleanup;
 import org.art.entity.Payment;
 import org.art.entity.User;
 import org.art.util.HibernateTestUtil;
-import org.art.util.TestDataImporter;
+import org.art.util.TestTestDataImporter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
@@ -24,7 +24,7 @@ public class UserDaoHQLTest {
 
     @BeforeAll
     public void initDb() {
-        TestDataImporter.importData(sessionFactory);
+        TestTestDataImporter.importData(sessionFactory);
     }
 
     @AfterAll

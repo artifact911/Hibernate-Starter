@@ -1,13 +1,12 @@
 package org.art.dao;
 
 import jakarta.persistence.Tuple;
-import lombok.Builder;
 import lombok.Cleanup;
 import org.art.dto.CompanyDto;
 import org.art.entity.Payment;
 import org.art.entity.User;
 import org.art.util.HibernateTestUtil;
-import org.art.util.TestDataImporter;
+import org.art.util.TestTestDataImporter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
@@ -26,7 +25,7 @@ public class UserDaoCriteriaTest {
 
     @BeforeAll
     public void initDb() {
-        TestDataImporter.importData(sessionFactory);
+        TestTestDataImporter.importData(sessionFactory);
     }
 
     @AfterAll

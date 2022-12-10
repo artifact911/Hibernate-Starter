@@ -14,83 +14,100 @@ import java.util.Arrays;
 public class TestDataImporter {
 
     public void importData(SessionFactory sessionFactory) {
-        @Cleanup Session session = sessionFactory.openSession();
 
-        Company microsoft = saveCompany(session, "Microsoft");
-        Company apple = saveCompany(session, "Apple");
-        Company google = saveCompany(session, "Google");
+        Company microsoft = saveCompany(sessionFactory, "Microsoft");
+        Company apple = saveCompany(sessionFactory, "Apple");
+        Company google = saveCompany(sessionFactory, "Google");
 
-        User billGates = saveUser(session, "Bill", "Gates",
+        User billGates = saveUser(sessionFactory, "Bill", "Gates",
                 LocalDate.of(1955, Month.OCTOBER, 28), microsoft);
-        User steveJobs = saveUser(session, "Steve", "Jobs",
+        User steveJobs = saveUser(sessionFactory, "Steve", "Jobs",
                 LocalDate.of(1955, Month.FEBRUARY, 24), apple);
-        User sergeyBrin = saveUser(session, "Sergey", "Brin",
+        User sergeyBrin = saveUser(sessionFactory, "Sergey", "Brin",
                 LocalDate.of(1973, Month.AUGUST, 21), google);
-        User timCook = saveUser(session, "Tim", "Cook",
+        User timCook = saveUser(sessionFactory, "Tim", "Cook",
                 LocalDate.of(1960, Month.NOVEMBER, 1), apple);
-        User dianeGreene = saveUser(session, "Diane", "Greene",
+        User dianeGreene = saveUser(sessionFactory, "Diane", "Greene",
                 LocalDate.of(1955, Month.JANUARY, 1), google);
 
-        savePayment(session, billGates, 100);
-        savePayment(session, billGates, 300);
-        savePayment(session, billGates, 500);
+        savePayment(sessionFactory, billGates, 100);
+        savePayment(sessionFactory, billGates, 300);
+        savePayment(sessionFactory, billGates, 500);
 
-        savePayment(session, steveJobs, 250);
-        savePayment(session, steveJobs, 600);
-        savePayment(session, steveJobs, 500);
+        savePayment(sessionFactory, steveJobs, 250);
+        savePayment(sessionFactory, steveJobs, 600);
+        savePayment(sessionFactory, steveJobs, 500);
 
-        savePayment(session, timCook, 400);
-        savePayment(session, timCook, 300);
+        savePayment(sessionFactory, timCook, 400);
+        savePayment(sessionFactory, timCook, 300);
 
-        savePayment(session, sergeyBrin, 500);
-        savePayment(session, sergeyBrin, 500);
-        savePayment(session, sergeyBrin, 500);
+        savePayment(sessionFactory, sergeyBrin, 500);
+        savePayment(sessionFactory, sergeyBrin, 500);
+        savePayment(sessionFactory, sergeyBrin, 500);
 
-        savePayment(session, dianeGreene, 300);
-        savePayment(session, dianeGreene, 300);
-        savePayment(session, dianeGreene, 300);
+        savePayment(sessionFactory, dianeGreene, 300);
+        savePayment(sessionFactory, dianeGreene, 300);
+        savePayment(sessionFactory, dianeGreene, 300);
 
-        Chat dmdev = saveChat(session, "dmdev");
-        Chat java = saveChat(session, "java");
-        Chat youtubeMembers = saveChat(session, "youtube-members");
+        Chat dmdev = saveChat(sessionFactory, "dmdev");
+        Chat java = saveChat(sessionFactory, "java");
+        Chat youtubeMembers = saveChat(sessionFactory, "youtube-members");
 
-        addToChat(session, dmdev, billGates, steveJobs, sergeyBrin);
-        addToChat(session, java, billGates, steveJobs, timCook, dianeGreene);
-        addToChat(session, youtubeMembers, billGates, steveJobs, timCook, dianeGreene);
+        addToChat(sessionFactory, dmdev, billGates, steveJobs, sergeyBrin);
+        addToChat(sessionFactory, java, billGates, steveJobs, timCook, dianeGreene);
+        addToChat(sessionFactory, youtubeMembers, billGates, steveJobs, timCook, dianeGreene);
     }
 
-    private void addToChat(Session session, Chat chat, User... users) {
+    private void addToChat(SessionFactory sessionFactory, Chat chat, User... users) {
+        @Cleanup Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Arrays.stream(users)
                 .map(user -> UserChat.builder()
                         .chat(chat)
                         .user(user)
                         .build())
-                .forEach(session::save);
+                .forEach(session::persist);
+
+        session.getTransaction().commit();
     }
 
-    private Chat saveChat(Session session, String chatName) {
+    private Chat saveChat(SessionFactory sessionFactory, String chatName) {
+        @Cleanup Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Chat chat = Chat.builder()
                 .name(chatName)
                 .build();
-        session.save(chat);
+        session.persist(chat);
+
+        session.getTransaction().commit();
 
         return chat;
     }
 
-    private Company saveCompany(Session session, String name) {
+    private Company saveCompany(SessionFactory sessionFactory, String name) {
+        @Cleanup Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Company company = Company.builder()
                 .name(name)
                 .build();
-        session.save(company);
+        session.persist(company);
+
+        session.getTransaction().commit();
 
         return company;
     }
 
-    private User saveUser(Session session,
+    private User saveUser(SessionFactory sessionFactory,
                           String firstName,
                           String lastName,
                           LocalDate birthday,
                           Company company) {
+        @Cleanup Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         User user = User.builder()
                 .username(firstName + lastName)
                 .personalInfo(PersonalInfo.builder()
@@ -100,16 +117,23 @@ public class TestDataImporter {
                         .build())
                 .company(company)
                 .build();
-        session.save(user);
+        session.persist(user);
+
+        session.getTransaction().commit();
 
         return user;
     }
 
-    private void savePayment(Session session, User user, Integer amount) {
+    private void savePayment(SessionFactory sessionFactory, User user, Integer amount) {
+        @Cleanup Session session = sessionFactory.openSession();
+        session.beginTransaction();
+
         Payment payment = Payment.builder()
                 .receiver(user)
                 .amount(amount)
                 .build();
-        session.save(payment);
+        session.persist(payment);
+
+        session.getTransaction().commit();
     }
 }
