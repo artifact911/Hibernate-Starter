@@ -13,10 +13,10 @@
         <property name="format_sql">true</property>
 
 <!--        create сделали единожды для создания базы-->
-<!--        <property name="hibernate.hbm2ddl.auto">create</property>-->
+        <property name="hibernate.hbm2ddl.auto">create</property>
 
 <!--        validate теперь просто для проверки соответствия БД-->
-        <property name="hibernate.hbm2ddl.auto">validate</property>
+<!--        <property name="hibernate.hbm2ddl.auto">validate</property>-->
 
 <!--        установка уровня изолированности транзакций-->
 <!--        <property name="hibernate.connection.isolation">8</property>-->
