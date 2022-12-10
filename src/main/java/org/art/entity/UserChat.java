@@ -2,6 +2,7 @@ package org.art.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.art.listener.UserChatListener;
 
 @Data
 @AllArgsConstructor
@@ -9,6 +10,7 @@ import lombok.*;
 @Builder
 @EqualsAndHashCode(of = "id", callSuper=false)
 @Entity(name = "users_chat")
+@EntityListeners(UserChatListener.class)
 public class UserChat extends AuditableEntity<Long>{
 
     @Id
