@@ -2,6 +2,7 @@ package org.art.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -17,6 +18,8 @@ import org.hibernate.envers.RelationTargetAuditMode;
 //@OptimisticLocking(type = OptimisticLockType.ALL)
 //@DynamicUpdate
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+// для кэша запросов
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Payment extends AuditableEntity<Long> {
 
     @Id

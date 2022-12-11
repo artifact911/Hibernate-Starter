@@ -17,7 +17,7 @@ import java.util.TreeMap;
 @Builder
 @Entity
 @Audited
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "Companies")
 public class Company {
 
     @Id

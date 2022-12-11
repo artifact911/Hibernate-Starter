@@ -33,6 +33,13 @@ public class HibernateRunner {
                 user.getUserChats().size();
                 var user1 = session.find(User.class, 1L);
 
+                var payments = session.createQuery("select p from Payment p where p.receiver.id = :userId", Payment.class)
+                        .setParameter("userId", 1L)
+                        // хотим искать запрос в кэше
+                        .setCacheable(true)
+                        .getResultList();
+
+                System.out.println(sessionFactory.getStatistics().getCacheRegionStatistics("Users"));
                 session.getTransaction().commit();
             }
 
@@ -43,6 +50,12 @@ public class HibernateRunner {
                 user2.getCompany().getName();
                 user.getUserChats().size();
 
+                var payments = session.createQuery("select p from Payment p where p.receiver.id = :userId", Payment.class)
+                        .setParameter("userId", 1L)
+                        .setCacheable(true)
+                        .getResultList();
+
+                System.out.println(sessionFactory.getStatistics().getCacheRegionStatistics("Users"));
                 session.getTransaction().commit();
             }
         }

@@ -21,8 +21,16 @@
 <!--        установка уровня изолированности транзакций-->
 <!--        <property name="hibernate.connection.isolation">8</property>-->
 
+
         <property name="hibernate.cache.use_second_level_cache">true</property>
+<!--        для кэша запросов-->
+        <property name="hibernate.cache.use_query_cache">true</property>
+<!--        для просмотра статистики исполоьзования-->
+        <property name="hibernate.generate_statistics">true</property>
         <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.internal.JCacheRegionFactory</property>
+
+        <!--не сработало-->
+        <!--        <property name="hibernate.javax.cache.uri">/ehcache-config.xml</property>-->
 
         <mapping class="org.art.entity.User"/>
         <mapping class="org.art.entity.Company"/>
