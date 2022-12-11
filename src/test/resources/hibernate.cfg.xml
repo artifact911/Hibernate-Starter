@@ -18,6 +18,7 @@
         <mapping class="org.art.entity.UserChat"/>
         <mapping class="org.art.entity.Payment"/>
         <mapping class="org.art.entity.Audit"/>
+        <mapping class="org.art.entity.Revision"/>
 
     </session-factory>
 </hibernate-configuration>

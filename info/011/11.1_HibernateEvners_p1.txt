@@ -20,3 +20,20 @@
 
     Такая мулька (выше) прокатит только с сущностями. С коллекциями продолжаем юзать @NotAudited
 
+Мы можем создать свою сущность для отслеживания ревизий. Для этого над создаваемым классом сущности ставим
+    @RevisionEntity и вводим 2 обязательных поля. Если мы хотим еще какие-то поля, наприпер пользователь, кто сделал
+    изменения, то нам нужно реализовать такой механизм. Например, через Лисенер.
+
+        @RevisionEntity(ArtRevisionListener.class)
+        public class Revision {
+
+            @Id
+            @GeneratedValue(strategy = GenerationType.IDENTITY)
+            @RevisionNumber
+            private Long id;
+
+            @RevisionTimestamp
+            private Long timestamp;
+
+            private String user;
+        }
