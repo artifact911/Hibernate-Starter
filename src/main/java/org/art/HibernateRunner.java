@@ -3,10 +3,19 @@ package org.art;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.matcher.ElementMatchers;
+import org.art.dao.CompanyRepository;
 import org.art.dao.PaymentRepository;
-import org.art.entity.Payment;
-import org.art.entity.User;
-import org.art.entity.UserChat;
+import org.art.dao.UserRepository;
+import org.art.dto.UserCreateDto;
+import org.art.entity.*;
+import org.art.interceptor.TransactionInterceptor;
+import org.art.mapper.CompanyReadMapper;
+import org.art.mapper.UserCreateMapper;
+import org.art.mapper.UserReadMapper;
+import org.art.service.UserService;
 import org.art.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +23,7 @@ import org.hibernate.graph.GraphSemantic;
 import org.hibernate.graph.RootGraph;
 
 import java.lang.reflect.Proxy;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Slf4j
@@ -26,13 +36,51 @@ public class HibernateRunner {
             var session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(),
                     new Class[]{Session.class},
                     (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args1));
-            session.beginTransaction();
+//            session.beginTransaction();
 
-            var paymentRepository = new PaymentRepository(session);
+            var companyRepository = new CompanyRepository(session);
 
-            paymentRepository.findById(1L).ifPresent(System.out::println);
+            var companyReadMapper = new CompanyReadMapper();
+            var userReadMapper = new UserReadMapper(companyReadMapper);
+            var userCreateMapper = new UserCreateMapper(companyRepository);
 
-            session.getTransaction().commit();
+            var userRepository = new UserRepository(session);
+//            var userService = new UserService(userRepository, userReadMapper, userCreateMapper);
+
+            // из прошлого урока
+//            var paymentRepository = new PaymentRepository(session);
+//            paymentRepository.findById(1L).ifPresent(System.out::println);
+
+            var transactionInterceptor = new TransactionInterceptor(sessionFactory);
+
+            // это мы прокси содали. Охуеть. Это блять шоб не открывать транзакции ручками. И не коммитить их.
+            // 2 строчки написать надо было, блять! Нахуй это все?! Кто-то ебанулся однозначно
+            var userService = new ByteBuddy()
+                    .subclass(UserService.class)
+                    .method(ElementMatchers.any())
+                    .intercept(MethodDelegation.to(transactionInterceptor))
+                    .make()
+                    .load(UserService.class.getClassLoader())
+                    .getLoaded()
+                    .getDeclaredConstructor(UserRepository.class, UserReadMapper.class, UserCreateMapper.class)
+                    .newInstance(userRepository, userReadMapper, userCreateMapper);
+
+//            userService.findById(1L).ifPresent(System.out::println);
+
+            UserCreateDto userCreateDto = new UserCreateDto(
+                    PersonalInfo.builder()
+                            .firstname("Liza")
+                            .lastname("Stepanova")
+                            .birthDate(LocalDate.now())
+                            .build(),
+                    "liza2@gmail.com",
+                    null,
+                    Role.USER,
+                    1);
+
+            userService.create(userCreateDto);
+
+//            session.getTransaction().commit();
         }
     }
 

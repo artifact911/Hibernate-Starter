@@ -13,13 +13,14 @@ import org.hibernate.type.SqlTypes;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedEntityGraph(name = "withCompany", attributeNodes = {@NamedAttributeNode("company")})
 @NamedEntityGraph(name = "withCompanyAndChat",
         attributeNodes = {
                 @NamedAttributeNode("company"),
                 @NamedAttributeNode(value = "userChats", subgraph = "chats")
         },
         subgraphs = {
-        @NamedSubgraph(name = "chats", attributeNodes = @NamedAttributeNode("chat"))
+                @NamedSubgraph(name = "chats", attributeNodes = @NamedAttributeNode("chat"))
         }
 )
 @FetchProfile(name = "withCompanyAndPayment", fetchOverrides = {
