@@ -3,6 +3,7 @@ package org.art;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.art.dao.PaymentRepository;
 import org.art.entity.Payment;
 import org.art.entity.User;
 import org.art.entity.UserChat;
@@ -20,6 +21,20 @@ public class HibernateRunner {
     @SneakyThrows
     @Transactional
     public static void main(String[] args) {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
+            try (var session = sessionFactory.openSession()) {
+                session.beginTransaction();
+
+                var paymentRepository = new PaymentRepository(sessionFactory);
+
+                paymentRepository.findById(1L).ifPresent(System.out::println);
+
+                session.getTransaction().commit();
+            }
+        }
+    }
+
+    private static void before13main() {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
 //            TestDataImporter.importData(sessionFactory);
 
