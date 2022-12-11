@@ -9,7 +9,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ToString(callSuper = false)
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 //@EqualsAndHashCode(exclude = "version")

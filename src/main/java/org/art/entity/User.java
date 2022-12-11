@@ -36,7 +36,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "username")
-@ToString(exclude = {"company", "userChats"})
+@ToString(exclude = {"company", "userChats", "payments"})
 @Builder
 @Entity
 @Table(name = "users", schema = "public") // схема тут не обязательно, тк эта по умолчанию

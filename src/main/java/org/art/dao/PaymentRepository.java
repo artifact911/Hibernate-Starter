@@ -1,11 +1,11 @@
 package org.art.dao;
 
+import jakarta.persistence.EntityManager;
 import org.art.entity.Payment;
-import org.hibernate.SessionFactory;
 
 public class PaymentRepository extends RepositoryBase<Long, Payment> {
 
-    public PaymentRepository(SessionFactory sessionFactory) {
-        super(Payment.class, sessionFactory);
+    public PaymentRepository(EntityManager entityManager) {
+        super(Payment.class, entityManager);
     }
 }

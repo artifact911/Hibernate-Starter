@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.graph.GraphSemantic;
 import org.hibernate.graph.RootGraph;
 
+import java.lang.reflect.Proxy;
 import java.util.Map;
 
 @Slf4j
@@ -22,15 +23,16 @@ public class HibernateRunner {
     @Transactional
     public static void main(String[] args) {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
-            try (var session = sessionFactory.openSession()) {
-                session.beginTransaction();
+            var session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(),
+                    new Class[]{Session.class},
+                    (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args1));
+            session.beginTransaction();
 
-                var paymentRepository = new PaymentRepository(sessionFactory);
+            var paymentRepository = new PaymentRepository(session);
 
-                paymentRepository.findById(1L).ifPresent(System.out::println);
+            paymentRepository.findById(1L).ifPresent(System.out::println);
 
-                session.getTransaction().commit();
-            }
+            session.getTransaction().commit();
         }
     }
 

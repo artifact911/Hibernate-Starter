@@ -28,6 +28,8 @@
 <!--        для просмотра статистики исполоьзования-->
         <property name="hibernate.generate_statistics">true</property>
         <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.internal.JCacheRegionFactory</property>
+<!--       указали, где мы берем текущую сессию-->
+        <property name="hibernate.current_session_context_class">thread</property>
 
         <!--не сработало-->
         <!--        <property name="hibernate.javax.cache.uri">/ehcache-config.xml</property>-->

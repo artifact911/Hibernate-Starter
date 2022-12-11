@@ -1,11 +1,11 @@
 package org.art.dao;
 
+import jakarta.persistence.EntityManager;
 import org.art.entity.Company;
-import org.hibernate.SessionFactory;
 
 public class CompanyRepository extends RepositoryBase<Integer, Company> {
 
-    public CompanyRepository(SessionFactory sessionFactory) {
-        super(Company.class, sessionFactory);
+    public CompanyRepository(EntityManager entityManager) {
+        super(Company.class, entityManager);
     }
 }

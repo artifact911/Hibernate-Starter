@@ -1,0 +1,23 @@
+Мы поймали LazyInitException. Все потому, что в каждом методе дао, мы закрываем сессию. Что бы этого избежать, нам
+    нужно как-то сессию туда передавать. Явно - не вариант, мы используем весь пулл сессий. Есть аозможность получить
+    текущую сессию:
+         var session = sessionFactory.getCurrentSession();
+
+    Откуда хибер знает, где ему сессию взять? Пишем в конфиге:
+         <property name="hibernate.current_session_context_class">thread</property>
+
+    указывая, какой класс будет этим заниматься. Бывает:
+        - jta
+        - managed (похож на нижний, но он сам их не открывает и не закрывает)
+        - thread (сам открывает и закрывает сессию)
+
+    Теперь и в main мы получим текущую сессию. Более того, нам не нужно будет ее закрывать, она закроется автоматом
+          try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
+                    var session = sessionFactory.getCurrentSession();
+                        session.beginTransaction();
+
+                        var paymentRepository = new PaymentRepository(sessionFactory);
+                        paymentRepository.findById(1L).ifPresent(System.out::println);
+
+                        session.getTransaction().commit();
+                }
