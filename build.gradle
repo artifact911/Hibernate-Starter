@@ -21,6 +21,9 @@ dependencies {
     implementation 'org.slf4j:slf4j-reload4j:2.0.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 
+    implementation 'org.hibernate:hibernate-jcache:6.1.5.Final'
+    implementation 'org.ehcache:ehcache:3.10.6'
+
     annotationProcessor 'org.hibernate:hibernate-jpamodelgen:6.1.5.Final'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'

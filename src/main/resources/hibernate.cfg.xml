@@ -21,6 +21,9 @@
 <!--        установка уровня изолированности транзакций-->
 <!--        <property name="hibernate.connection.isolation">8</property>-->
 
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.internal.JCacheRegionFactory</property>
+
         <mapping class="org.art.entity.User"/>
         <mapping class="org.art.entity.Company"/>
         <mapping class="org.art.entity.Profile"/>
