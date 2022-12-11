@@ -20,5 +20,7 @@ public class PersonalInfo {
 
     // перепишем в  configuration.addAttributeConverter(new BirthdayConverter());
 //    @Convert(converter = BirthdayConverter.class)
+    // не сработало
+//    @NotNull // поставили для валидации перед пушем в БД
     private LocalDate birthDate;
 }

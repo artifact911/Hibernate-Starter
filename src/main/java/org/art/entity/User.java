@@ -53,8 +53,10 @@ public class User implements Comparable<User>, BaseEntity<Long> {
     private String username;
 
     // название этого поля не имеет никакого значения
-    @Embedded
+//    @Embedded
     @AttributeOverride(name = "birthDate", column = @Column(name = "birth_date"))
+    // не сработало
+//    @Valid // типа эту сущность надо валидировать согласно аннотаций внутри класса
     private PersonalInfo personalInfo;
 
     /**

@@ -25,6 +25,12 @@ dependencies {
     implementation 'org.hibernate:hibernate-ehcache:5.6.14.Final'
     implementation 'org.ehcache:ehcache:3.10.6'
 
+    // блок для валидации энтити
+    // не сработало
+//    implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
+//    implementation 'javax.el:javax.el-api:3.0.0'
+//    implementation 'org.glassfish:javax.el:3.0.0'
+
     annotationProcessor 'org.hibernate:hibernate-jpamodelgen:6.1.5.Final'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
