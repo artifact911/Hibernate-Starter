@@ -2,6 +2,7 @@ package org.art.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.FetchProfile;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -40,6 +41,7 @@ import java.util.List;
 @Entity
 @Table(name = "users", schema = "public") // схема тут не обязательно, тк эта по умолчанию
 @Audited
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User implements Comparable<User>, BaseEntity<Long> {
 
     @Id
@@ -75,6 +77,7 @@ public class User implements Comparable<User>, BaseEntity<Long> {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     @NotAudited
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<UserChat> userChats = new ArrayList<>();
 
     @Builder.Default

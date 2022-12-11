@@ -3,6 +3,7 @@ package org.art.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.art.listener.UserChatListener;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Data
 @AllArgsConstructor
@@ -11,6 +12,7 @@ import org.art.listener.UserChatListener;
 @EqualsAndHashCode(of = "id", callSuper=false)
 @Entity(name = "users_chat")
 @EntityListeners(UserChatListener.class)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserChat extends AuditableEntity<Long>{
 
     @Id

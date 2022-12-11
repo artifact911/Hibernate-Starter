@@ -2,6 +2,7 @@ package org.art.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -16,6 +17,7 @@ import java.util.TreeMap;
 @Builder
 @Entity
 @Audited
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Company {
 
     @Id
