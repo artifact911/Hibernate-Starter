@@ -7,9 +7,10 @@ import org.art.entity.Payment;
 import org.art.entity.User;
 import org.art.entity.UserChat;
 import org.art.util.HibernateUtil;
-import org.art.util.TestDataImporter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.graph.GraphSemantic;
 import org.hibernate.graph.RootGraph;
 
@@ -21,16 +22,45 @@ public class HibernateRunner {
     @SneakyThrows
     @Transactional
     public static void main(String[] args) {
-        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-             Session session = sessionFactory.openSession()) {
-            TestDataImporter.importData(sessionFactory);
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
+//            TestDataImporter.importData(sessionFactory);
 
-            session.beginTransaction();
+            try (var session = sessionFactory.openSession()) {
+                session.beginTransaction();
 
-            var payment = session.find(Payment.class, 1L);
-            payment.setAmount(payment.getAmount() + 10);
+                var payment = session.find(Payment.class, 1L);
+                payment.setAmount(payment.getAmount() + 10);
 
-            session.getTransaction().commit();
+                session.getTransaction().commit();
+            }
+
+            try (var session2 = sessionFactory.openSession()) {
+                session2.beginTransaction();
+
+                var auditReader = AuditReaderFactory.get(session2);
+
+                // теперь могу получить состояние сущности по айДи или по timestamp ан момент указанной ревизии
+//                var OldPaymentDate = auditReader.find(Payment.class, 1L, new Date(1670759039284L));
+
+                // на самом деле это будет не объект Payment, а Payment_aud
+                var oldPayment = auditReader.find(Payment.class, 1L, 1L);
+
+                // чтоб накатить определенное стостояние в БД:
+                // !!! падает(
+//                session2.replicate(oldPayment, ReplicationMode.OVERWRITE);
+
+
+                var auditQuery = auditReader.createQuery()
+                        .forEntitiesAtRevision(Payment.class, 400L)
+                        .add(AuditEntity.property("amont").ge(450))
+                        .add(AuditEntity.property("id").ge(1L))
+                        .addProjection(AuditEntity.property("amount"))
+                        .addProjection(AuditEntity.id());
+
+                session2.getTransaction().commit();
+            }
+
+
         }
     }
 
